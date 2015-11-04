@@ -59,10 +59,12 @@ public class Shader {
 		Gdx.gl.glCompileShader(vertexShaderID);
 		Gdx.gl.glCompileShader(fragmentShaderID);
 
+		/*
 		System.out.println("Vertex shader compile messages:");
 		System.out.println(Gdx.gl.glGetShaderInfoLog(vertexShaderID));
 		System.out.println("Fragment shader compile messages:");
 		System.out.println(Gdx.gl.glGetShaderInfoLog(fragmentShaderID));
+		*/
 
 		renderingProgramID = Gdx.gl.glCreateProgram();
 
