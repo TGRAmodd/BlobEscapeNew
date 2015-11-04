@@ -35,7 +35,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	MeshModel model;
 
 	private Texture tex;
-	private Texture brickTex;
 	
 	private Maze maze;
 	
@@ -53,7 +52,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		maze = new Maze(15, 15);
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
-		brickTex = new Texture(Gdx.files.internal("textures/bricks.png"));
 
 		model = G3DJModelLoader.loadG3DJFromFile("testBlob.g3dj");
 
@@ -83,7 +81,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		tex = new Texture(pm);*/
 
-		Gdx.gl.glClearColor(0.4f, 0.4f, 0.8f, 1.0f);
+		Gdx.gl.glClearColor(0.35f, 0.35f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
 	}
 
