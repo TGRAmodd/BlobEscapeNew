@@ -91,6 +91,7 @@ public class BoxGraphic {
 
 
 		//UV TEXTURE COORD ARRAY IS FILLED HERE
+		/*
 		float[] uvArray = {0.3333f, 0.3333f,
 							0.6666f, 0.3333f,
 							0.6666f, 0.6666f,
@@ -119,7 +120,37 @@ public class BoxGraphic {
 							0.0f, 1.0f,
 							1.0f, 1.0f,
 							1.0f, 0.0f,
-							0.0f, 0.0f};
+							0.0f, 0.0f};*/
+		
+		float[] uvArray = {0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f,
+				
+				0.0f, 0.0f,
+				1.0f, 0.0f,
+				1.0f, 1.0f,
+				0.0f, 1.0f};
 
 		uvBuffer = BufferUtils.newFloatBuffer(48);
 		BufferUtils.copy(uvArray, 0, uvBuffer, 48);
