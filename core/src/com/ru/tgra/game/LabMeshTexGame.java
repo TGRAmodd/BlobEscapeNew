@@ -203,7 +203,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			ModelMatrix.main.addTranslation(6.0f, 4.0f, -6.0f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
-			//BoxGraphic.drawSolidCube(shader, tex);
 			model.draw(shader);
 			ModelMatrix.main.popMatrix();
 			
@@ -212,7 +211,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			BoxGraphic.drawSolidCube(shader, tex);
-			//model.draw(shader);
 			ModelMatrix.main.popMatrix();
 			
 			shader.setMaterialDiffuse(0.5f, 0.3f, 1.0f, 1.0f);
@@ -220,7 +218,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
 			maze.drawMaze();
-
+			
 			if(viewNum == 1)
 			{
 				//shader.setMaterialDiffuse(1.0f, 0.3f, 0.1f, 1.0f);
