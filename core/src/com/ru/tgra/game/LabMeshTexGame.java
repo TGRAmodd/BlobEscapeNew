@@ -35,6 +35,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	MeshModel model;
 
 	private Texture tex;
+	private Texture brickTex;
 	
 	private Maze maze;
 	
@@ -52,6 +53,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		maze = new Maze(15, 15);
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
+		brickTex = new Texture(Gdx.files.internal("textures/bricks.png"));
 
 		model = G3DJModelLoader.loadG3DJFromFile("testBlob.g3dj");
 
@@ -81,7 +83,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		tex = new Texture(pm);*/
 
-		Gdx.gl.glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
+		Gdx.gl.glClearColor(0.4f, 0.4f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
 	}
 
@@ -185,33 +187,40 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			float c2 = Math.abs((float)Math.cos((angle / 1.312) * Math.PI / 180.0));
 
 			shader.setSpotDirection(s2, -0.3f, c2, 0.0f);
-			//shader.setSpotDirection(-cam.n.x, -cam.n.y, -cam.n.z, 0.0f);
 			shader.setSpotExponent(0.0f);
 			shader.setConstantAttenuation(1.0f);
 			shader.setLinearAttenuation(0.00f);
 			shader.setQuadraticAttenuation(0.00f);
 
-			//shader.setLightColor(s2, 0.4f, c2, 1.0f);
 			shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
 			
 			shader.setGlobalAmbient(0.3f, 0.3f, 0.3f, 1);
 
-			//shader.setMaterialDiffuse(s, 0.4f, c, 1.0f);
 			shader.setMaterialDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
-			//shader.setMaterialSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
 
 			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(0.0f, 4.0f, 0.0f);
+			ModelMatrix.main.addTranslation(6.0f, 4.0f, -6.0f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
-
+			//BoxGraphic.drawSolidCube(shader, tex);
+			model.draw(shader);
+			ModelMatrix.main.popMatrix();
+			
+			ModelMatrix.main.pushMatrix();
+			ModelMatrix.main.addTranslation(8.0f, 4.0f, -8.0f);
+			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			BoxGraphic.drawSolidCube(shader, tex);
 			//model.draw(shader);
-
 			ModelMatrix.main.popMatrix();
+			
+			shader.setMaterialDiffuse(0.5f, 0.3f, 1.0f, 1.0f);
+			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+			shader.setMaterialEmission(0, 0, 0, 1);
+			shader.setShininess(50.0f);
 			maze.drawMaze();
 
 			if(viewNum == 1)

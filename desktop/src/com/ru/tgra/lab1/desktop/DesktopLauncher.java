@@ -17,7 +17,6 @@ public class DesktopLauncher {
 		config.y = 80;
 		//config.fullscreen = true;
 		
-
 		new LwjglApplication(new LabMeshTexGame(), config);
 	}
 }
