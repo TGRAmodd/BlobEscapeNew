@@ -50,7 +50,6 @@ public class Camera {
 		n.normalize();
 		u.normalize();
 		v = n.cross(u);
-
 	}
 
 	public void setEye(float x, float y, float z)
@@ -60,9 +59,12 @@ public class Camera {
 
 	public void slide(float delU, float delV, float delN)
 	{
-		eye.x += delU*u.x + delV*v.x + delN*n.x;
-		eye.y += delU*u.y + delV*v.y + delN*n.y;
-		eye.z += delU*u.z + delV*v.z + delN*n.z;
+		float originX = eye.x;
+		float originZ = eye.z;
+		int locX = -1;
+		int locZ = -1;
+		
+		collisionCheck(delU, delV, delN, originX, originZ, locX, locZ, false);
 	}
 
 	public void roll(float angle)
@@ -74,7 +76,6 @@ public class Camera {
 
 		u.set(t.x * c - v.x * s, t.y * c - v.y * s, t.z * c - v.z * s);
 		v.set(t.x * s + v.x * c, t.y * s + v.y * c, t.z * s + v.z * c);
-		
 	}
 
 	public void yaw(float angle)
@@ -103,9 +104,11 @@ public class Camera {
 
 	public void walkForward(float del)
 	{
-		eye.x -= del*n.x;
-		//eye.y += del*n.y;
-		eye.z -= del*n.z;
+		float originX = eye.x;
+		float originZ = eye.z;
+		int locX = -1;
+		int locZ = -1;
+		collisionCheck(0, 0, del, originX, originZ, locX, locZ, true);
 	}
 
 	public void rotateY(float angle)
@@ -183,6 +186,171 @@ public class Camera {
 		
 		return matrixBuffer;
 	}
+	
+	public void collisionCheck(float delU, float delV, float delN, float originX, float originZ, int locX, int locZ, boolean forward){
+		
+		float padding = 0.35f;
 
+		for(int i = 0; i < Maze.width; i++){
+			if(Math.floor(eye.x) == i){
+				for(int j = 0; j < Maze.height; j++){
+					if(Math.floor(eye.z) == -j){
+						locX = i;
+						locZ = j;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		
+		if(forward){
+			eye.x -= delN*n.x;
+			eye.z -= delN*n.z;
+		}
+		else{
+			eye.x += delU*u.x + delV*v.x + delN*n.x;
+			//eye.y += delU*u.y + delV*v.y + delN*n.y;
+			eye.z += delU*u.z + delV*v.z + delN*n.z;
+		}
+		
+		if(locX < 0 || locZ < 0){
+			return;
+		}
+		
+		Cell cell = Maze.cells[locX][locZ];
+		float relX = eye.x-locX;
+		float relZ = eye.z+locZ;
+		
+		if(cell.northWall){
+			if(relZ <= padding){
+				eye.z = originZ;
+			}
+		}
+		if(cell.eastWall){
+			if(relX >= 1-padding){
+				eye.x = originX;
+			}
+		}
+		
+		// Check south wall
+		cell = Maze.getSouth(locX, locZ);
+		if(cell != null){
+			if(cell.northWall){
+				if(relZ >= 1-padding){
+					eye.z = originZ;
+				}
+			}
+		}
+		
+		// Check west wall
+		cell = Maze.getWest(locX, locZ);
+		if(cell != null){
+			if(cell.eastWall){
+				if(relX < padding){
+					eye.x = originX;
+				}
+			}
+		}
+		
+		// Check westNorth wall
+		cell = Maze.getWest(locX, locZ);
+		if(cell != null){
+			if(cell.northWall && !Maze.cells[locX][locZ].northWall){
+				if(relX < padding && relZ < padding){
+					eye.x = locX + padding;
+					
+					
+				}
+			}else{
+				cell = Maze.getWest(locX, locZ);
+				//System.out.println("westNortheastwall1");
+				if(cell != null){
+					cell = Maze.getNorth(locX-1, locZ);
+					if(cell != null){
+						if(cell.eastWall && !Maze.getWest(locX, locZ).eastWall){
+							
+							if(relX < padding && relZ < padding){
+								eye.z = -locZ + padding;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		//southwestNorthwall
+		cell = Maze.getSouth(locX, locZ);
+		if(cell != null){
+			cell = Maze.getWest(locX, locZ-1);
+			if(cell != null){
+				if(cell.northWall && !Maze.getSouth(locX, locZ).northWall){
+					if(relX < padding && relZ > 1-padding){
+						eye.x = locX + padding;
+					}
+				}else{
+					//southWestEastwall
+					cell = Maze.getSouth(locX, locZ);
+					if(cell != null){
+						cell = Maze.getWest(locX, locZ-1);
+						if(cell != null){
+							if(cell.eastWall && !Maze.getWest(locX, locZ).eastWall){
+								if(relX < padding && relZ > 1-padding){
+									eye.z = -locZ + 1-padding;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//southeastNorthwall
+		cell = Maze.getSouth(locX, locZ);
+		if(cell != null){
+			cell = Maze.getEast(locX, locZ-1);
+			if(cell != null){
+				if(cell.northWall && !Maze.getSouth(locX, locZ).northWall){
+					if(relX > 1-padding && relZ > 1-padding){
+						eye.x = locX + 1-padding;
+					}
+				}
+				else{
+					//southEastwall
+					cell = Maze.getSouth(locX, locZ);
+					if(cell != null){
+						if(cell.eastWall && !Maze.cells[locX][locZ].eastWall){
+							if(relX > 1-padding && relZ > 1-padding){
+								eye.z = -locZ + 1-padding;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		
+		//NorthEastwall
+		cell = Maze.getNorth(locX, locZ);
+		
+		if(cell != null){
+				if(cell.eastWall && !Maze.cells[locX][locZ].eastWall){
+					if(relX > 1-padding && relZ < padding){
+						eye.z = -locZ + padding;
+					}
+				}
+				else{
+					//eastNorthwall
+					cell = Maze.getEast(locX, locZ);
+					if(cell != null){
+						if(cell.northWall && !Maze.cells[locX][locZ].northWall){
+							if(relX > 1-padding && relZ < padding){
+								eye.x = locX + 1-padding;
+							}
+						}
+					}
+				}
+		}
+		
+	}
 	
 }
