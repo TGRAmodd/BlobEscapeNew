@@ -17,6 +17,7 @@ import com.ru.tgra.graphics.*;
 import com.ru.tgra.graphics.shapes.*;
 import com.ru.tgra.graphics.shapes.g3djmodel.G3DJModelLoader;
 import com.ru.tgra.graphics.shapes.g3djmodel.MeshModel;
+import com.ru.tgra.graphics.Maze;
 
 public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor {
 
@@ -27,11 +28,15 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private Camera cam;
 	private Camera topCam;
 	
+	public static int colorLoc;
+	
 	private float fov = 90.0f;
 
 	MeshModel model;
 
 	private Texture tex;
+	
+	private Maze maze;
 	
 	Random rand = new Random();
 
@@ -44,6 +49,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		Gdx.graphics.setDisplayMode(disp.width, disp.height, true);
 
 		shader = new Shader();
+		maze = new Maze(15, 15);
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
 
@@ -74,7 +80,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		tex = new Texture(pm);*/
 
-		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		Gdx.gl.glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
 	}
 
 	private void input()
@@ -150,6 +156,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	{
 		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glUniform4f(LabMeshTexGame.colorLoc, 1.0f, 0.3f, 0.1f, 1.0f);
 
 		Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 		//Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
@@ -229,8 +236,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			//model.draw(shader);
 
 			ModelMatrix.main.popMatrix();
-	
-			drawPyramids();
+			maze.drawMaze();
+			//drawPyramids();
 		}
 	}
 
