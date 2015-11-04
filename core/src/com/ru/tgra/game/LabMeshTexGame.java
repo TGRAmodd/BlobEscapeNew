@@ -24,6 +24,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	Shader shader;
 
 	private float angle;
+	private float moveLength;
 
 	private Camera cam;
 	private Camera topCam;
@@ -94,6 +95,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		
 		angle += 180.0f * deltaTime;
+		moveLength += deltaTime * 2.0f;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 			cam.slide(-3.0f * deltaTime, 0, 0);
@@ -162,13 +164,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 				shader.setProjectionMatrix(topCam.getProjectionMatrix());
 				shader.setEyePosition(topCam.eye.x, topCam.eye.y, topCam.eye.z, 1.0f);	
 			}
-
-	
-			//BoxGraphic.drawOutlineCube();
-			//SphereGraphic.drawSolidSphere();
-			//SphereGraphic.drawOutlineSphere();
-
-
+			
 			ModelMatrix.main.loadIdentityMatrix();
 
 			//ModelMatrix.main.addRotationZ(angle);
