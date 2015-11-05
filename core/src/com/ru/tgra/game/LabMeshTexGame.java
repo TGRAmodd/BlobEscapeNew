@@ -57,6 +57,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private boolean showGem;
 	
 	private Sound scream;
+	private Sound coin;
 	
 	Random rand = new Random();
 
@@ -118,6 +119,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		moveLength2 = 0.0f;
 		
 		scream = Gdx.audio.newSound(Gdx.files.internal("scream.mp3"));
+		coin = Gdx.audio.newSound(Gdx.files.internal("coin.wav"));
 	}
 
 	private void input()
@@ -327,6 +329,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
 			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
 			{
+				coin.setVolume(coin.play(), 0.4f);
 				showGem = false;
 			}
 	}
@@ -374,7 +377,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
 		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
@@ -392,7 +395,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
 		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
@@ -412,7 +415,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
 		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
@@ -430,7 +433,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
 		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
@@ -448,7 +451,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
 		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
