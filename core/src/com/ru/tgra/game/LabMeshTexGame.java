@@ -259,8 +259,10 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
 			
-			drawHorizontalBlobs();
-			drawVerticalBlobs();
+			if (viewNum == 0) {
+				drawHorizontalBlobs();
+				drawVerticalBlobs();
+			}
 
 			//Dice
 			ModelMatrix.main.pushMatrix();
