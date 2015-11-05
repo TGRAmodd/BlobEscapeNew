@@ -277,6 +277,9 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			//Gems
 			if (showGem == true) {
 				drawGems();
+				if (Maze.cells[11][13].northWall == false) {
+					Maze.cells[11][13].northWall = true;
+				}
 				//Open the exit
 			}
 			
