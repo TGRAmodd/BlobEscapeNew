@@ -268,12 +268,12 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
-			
+			/*
 			if (viewNum == 0) {
 				drawHorizontalBlobs();
 				drawVerticalBlobs();
 			}
-			
+			*/
 			//Gems
 			if (showGem == true) {
 				drawGems();
@@ -324,9 +324,19 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
 			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
 			{
-				//scream.setVolume(scream.play(), 0.4f);
 				showGem = false;
 			}
+	}
+	
+	public void drawGems() {
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(5.5f, 1.0f, -8.5f);
+		checkGemCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.3f, 0.3f, 0.3f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		gem.draw(shader);
+		ModelMatrix.main.popMatrix();
 	}
 	
 	public void drawHorizontalBlobs() {
@@ -382,18 +392,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
-		ModelMatrix.main.popMatrix();
-	}
-	
-	public void drawGems() {
-		ModelMatrix.main.pushMatrix();
-		Point3D gemPoint = new Point3D(18.0f, 3.0f, -28.0f);
-		checkGemCollision(gemPoint);
-		ModelMatrix.main.addScale(0.3f, 0.3f, 0.3f);
-		ModelMatrix.main.addTranslation(18.0f, 3.0f, -28.0f);
-		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
-		shader.setModelMatrix(ModelMatrix.main.getMatrix());
-		gem.draw(shader);
 		ModelMatrix.main.popMatrix();
 	}
 
