@@ -78,7 +78,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
 
-		model = G3DJModelLoader.loadG3DJFromFile("testBlob.g3dj");
+		model = G3DJModelLoader.loadG3DJFromFile("finalGhostRotate2.g3dj");
 
 		BoxGraphic.create();
 		SphereGraphic.create();
