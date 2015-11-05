@@ -24,6 +24,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	Shader shader;
 
 	private float angle;
+	private boolean coplight;
+	private int coplightCounter;
 
 	private Camera cam;
 	private Camera topCam;
@@ -50,6 +52,9 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 		shader = new Shader();
 		maze = new Maze(15, 15);
+		
+		coplight = false;
+		coplightCounter = 0;
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
 
@@ -176,7 +181,28 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
 			float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
 
-			shader.setLightPosition(0.0f + c * 3.0f, 5.0f, 0.0f + s * 3.0f, 1.0f);
+			//shader.setLightPosition(0.0f + c * 3.0f, 5.0f, 0.0f + s * 3.0f, 1.0f);
+			shader.setLightPosition2(3.0f, 5.0f, 3.1f, 1.0f);
+			//shader.setLightPosition3(3.0f, 5.0f, 3.0f, 1.0f);
+			
+			coplightCounter++;
+			if (coplight) {
+				//shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
+				if (coplightCounter > 1000) {
+					coplight = false;
+					coplightCounter = 0;
+				}
+				System.out.println("blue");
+			} 
+			else {
+				shader.setLightColor2(1.0f, 0.2f, 0.2f, 1.0f);
+				if (coplightCounter > 1000) {
+					coplight = true;
+					coplightCounter = 0;
+				}
+				System.out.println("red");
+			}
+			
 			//shader.setLightPosition(3.0f, 4.0f, 0.0f, 1.0f);
 			//shader.setLightPosition(cam.eye.x, cam.eye.y, cam.eye.z, 1.0f);
 
@@ -192,7 +218,9 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setQuadraticAttenuation(0.00f);
 
 			//shader.setLightColor(s2, 0.4f, c2, 1.0f);
-			shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
+			//shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
+			shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
+			//shader.setLightColor3(1.0f, 0.2f, 0.2f, 1.0f);
 			
 			shader.setGlobalAmbient(0.3f, 0.3f, 0.3f, 1);
 
