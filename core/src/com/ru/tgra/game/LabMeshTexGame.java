@@ -47,12 +47,14 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private float fov = 90.0f;
 
 	MeshModel model;
+	MeshModel gem;
 
 	private Texture tex;
 	
 	private Maze maze;
 	private boolean movingRight;
 	private boolean movingUp;
+	private boolean showGem;
 	
 	private Sound scream;
 	
@@ -62,6 +64,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	public void create () {
 		movingRight = true;
 		movingUp = true;
+		showGem = true;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -79,7 +82,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
 
 		model = G3DJModelLoader.loadG3DJFromFile("finalGhostRotate2.g3dj");
-
+		gem = G3DJModelLoader.loadG3DJFromFile("gemRotate1.g3dj");
+		
 		BoxGraphic.create();
 		SphereGraphic.create();
 
@@ -269,6 +273,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 				drawHorizontalBlobs();
 				drawVerticalBlobs();
 			}
+			
+			//Gems
+			if (showGem == true) {
+				drawGems();
+				//Open the exit
+			}
+			
 
 			//Dice
 			ModelMatrix.main.pushMatrix();
@@ -306,6 +317,15 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			{
 				scream.setVolume(scream.play(), 0.4f);
 				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
+			}
+	}
+	
+	public void checkGemCollision(Point3D p) {
+		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
+			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
+			{
+				//scream.setVolume(scream.play(), 0.4f);
+				showGem = false;
 			}
 	}
 	
@@ -362,6 +382,18 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
 		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+	}
+	
+	public void drawGems() {
+		ModelMatrix.main.pushMatrix();
+		Point3D gemPoint = new Point3D(18.0f, 3.0f, -28.0f);
+		checkGemCollision(gemPoint);
+		ModelMatrix.main.addScale(0.3f, 0.3f, 0.3f);
+		ModelMatrix.main.addTranslation(18.0f, 3.0f, -28.0f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		gem.draw(shader);
 		ModelMatrix.main.popMatrix();
 	}
 
