@@ -320,6 +320,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			{
 				scream.setVolume(scream.play(), 0.4f);
 				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
+				showGem = true;
 			}
 	}
 	
