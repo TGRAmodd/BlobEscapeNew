@@ -2,6 +2,7 @@ package com.ru.tgra.game;
 
 
 import java.util.Random;
+import java.util.TimerTask;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +19,8 @@ import com.ru.tgra.graphics.shapes.*;
 import com.ru.tgra.graphics.shapes.g3djmodel.G3DJModelLoader;
 import com.ru.tgra.graphics.shapes.g3djmodel.MeshModel;
 import com.ru.tgra.graphics.Maze;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.utils.Timer;
 
 public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor {
 
@@ -25,13 +28,16 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 	private float angle;
 
-	private boolean coplight;
-	private int coplightCounter;
-
 	private float moveLength;
 
 	private Camera cam;
 	private Camera topCam;
+	private float delay;
+	BlinkingLights copLights;
+	private boolean lightsOnOff;
+	
+	
+	TimerTask lightTask;
 	
 	public static int colorLoc;
 	
@@ -56,8 +62,10 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		shader = new Shader();
 		maze = new Maze(15, 15);
 		
-		coplight = false;
-		coplightCounter = 0;
+		delay = 1;
+		Timer timer;
+		copLights = new BlinkingLights();
+		lightsOnOff = true;
 
 		tex = new Texture(Gdx.files.internal("textures/dice.png"));
 
@@ -115,6 +123,9 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 			cam.walkForward(-3.0f * deltaTime);
+		}
+		if(Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+			lightsOnOff = !lightsOnOff;
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			cam.rotateY(90.0f * deltaTime);
@@ -179,27 +190,25 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
 			float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
 
-			//shader.setLightPosition(0.0f + c * 3.0f, 5.0f, 0.0f + s * 3.0f, 1.0f);
-			shader.setLightPosition2(3.0f, 5.0f, 3.1f, 1.0f);
-			//shader.setLightPosition3(3.0f, 5.0f, 3.0f, 1.0f);
-			
-			coplightCounter++;
-			if (coplight) {
-				//shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
-				if (coplightCounter > 1000) {
-					coplight = false;
-					coplightCounter = 0;
+			if (lightsOnOff == true) {
+				shader.setLightPosition2(15 * s + 10.0f, 7.0f,15 * c -10.0f, 1.0f);
+				if (copLights.getBlueOrRed()) {
+					shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
 				}
-				System.out.println("blue");
-			} 
-			else {
-				shader.setLightColor2(1.0f, 0.2f, 0.2f, 1.0f);
-				if (coplightCounter > 1000) {
-					coplight = true;
-					coplightCounter = 0;
+				else {
+					shader.setLightColor2(1.0f, 0.2f, 0.2f, 1.0f);
 				}
-				System.out.println("red");
 			}
+			else {
+				shader.setLightColor2(1, 1, 1, 1.0f);
+				shader.setLightPosition2(0.0f, 5.0f, 0.0f, 1.0f);
+				//shader.setLightPosition(0.0f, 5.0f, 0.0f, 1.0f);
+				//shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
+			}
+			
+			
+			
+			
 			
 			//shader.setLightPosition(3.0f, 4.0f, 0.0f, 1.0f);
 			//shader.setLightPosition(cam.eye.x, cam.eye.y, cam.eye.z, 1.0f);
@@ -216,8 +225,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 
 			//shader.setLightColor(s2, 0.4f, c2, 1.0f);
-			//shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
-			shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
+			
+			//shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
 			//shader.setLightColor3(1.0f, 0.2f, 0.2f, 1.0f);
 
 			
