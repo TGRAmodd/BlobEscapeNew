@@ -96,22 +96,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 		cam = new Camera();
 		cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
-
 		topCam = new Camera();
-		//orthoCam.orthographicProjection(-5, 5, -5, 5, 3.0f, 100);
-		//topCam.perspectiveProjection(30.0f, 1, 3, 100);
 		topCam.orthographicProjection(-10, 10, -10, 10, 3.0f, 100);	
-
-		//TODO: try this way to create a texture image
-		/*Pixmap pm = new Pixmap(128, 128, Format.RGBA8888);
-		for(int i = 0; i < pm.getWidth(); i++)
-		{
-			for(int j = 0; j < pm.getWidth(); j++)
-			{
-				pm.drawPixel(i, j, rand.nextInt());
-			}
-		}
-		tex = new Texture(pm);*/
 
 		Gdx.gl.glClearColor(0.35f, 0.35f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
@@ -124,10 +110,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		coin = Gdx.audio.newSound(Gdx.files.internal("coin.wav"));
 	}
 
-	private void input()
-	{
-	}
-	
 	private void update()
 	{
 		float deltaTime = Gdx.graphics.getDeltaTime();
@@ -187,18 +169,10 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	
 	private void display()
 	{
-		//do all actual drawing and rendering here
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.gl.glUniform4f(LabMeshTexGame.colorLoc, 1.0f, 0.3f, 0.1f, 1.0f);
-
 		Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
-		//Gdx.gl.glDisable(GL20.GL_DEPTH_TEST);
-/*
-		Gdx.gl.glEnable(GL20.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-		//Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE);
-		//Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-*/
+
 		for(int viewNum = 0; viewNum < 2; viewNum++)
 		{
 			if(viewNum == 0)
@@ -220,9 +194,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			}
 			
 			ModelMatrix.main.loadIdentityMatrix();
-
-			//ModelMatrix.main.addRotationZ(angle);
-
+			
 			float s = (float)Math.sin((angle / 2.0) * Math.PI / 180.0);
 			float c = (float)Math.cos((angle / 2.0) * Math.PI / 180.0);
 
@@ -238,17 +210,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			else {
 				shader.setLightColor2(1, 1, 1, 1.0f);
 				shader.setLightPosition2(0.0f, 5.0f, 0.0f, 1.0f);
-				//shader.setLightPosition(0.0f, 5.0f, 0.0f, 1.0f);
-				//shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
 			}
-			
-			
-			
-			
-			
-			//shader.setLightPosition(3.0f, 4.0f, 0.0f, 1.0f);
-			//shader.setLightPosition(cam.eye.x, cam.eye.y, cam.eye.z, 1.0f);
-
 
 			float s2 = Math.abs((float)Math.sin((angle / 1.312) * Math.PI / 180.0));
 			float c2 = Math.abs((float)Math.cos((angle / 1.312) * Math.PI / 180.0));
@@ -258,13 +220,6 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setConstantAttenuation(1.0f);
 			shader.setLinearAttenuation(0.00f);
 			shader.setQuadraticAttenuation(0.00f);
-
-
-			//shader.setLightColor(s2, 0.4f, c2, 1.0f);
-			
-			//shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
-			//shader.setLightColor3(1.0f, 0.2f, 0.2f, 1.0f);
-
 			
 			shader.setGlobalAmbient(0.3f, 0.3f, 0.3f, 1);
 
@@ -278,20 +233,18 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 				drawVerticalBlobs();
 			}
 
-			//Gems
+			//Gem
 			if (showGem == true) {
 				drawGems();
 				if (Maze.cells[11][13].northWall == false) {
 					Maze.cells[11][13].northWall = true;
 				}
-				//Open the exit
 			}
-			
 			if(showGem == false) {
 				Maze.cells[11][13].northWall = false;
 			}
 
-			//Dice
+			//Trump Box
 			ModelMatrix.main.pushMatrix();
 			ModelMatrix.main.addTranslation(8.0f, 6.0f, -8.0f);
 			ModelMatrix.main.addScale(2.0f, 2.0f, 2.0f);
@@ -300,15 +253,14 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			BoxGraphic.drawSolidCube(shader, tex);
 			ModelMatrix.main.popMatrix();
 			
-			//Congratulatory box
+			//'Congratulations' box
 			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(12.0f, 1.0f, -16.0f);
-			ModelMatrix.main.addScale(2.0f, 2.0f, 2.0f);
+			ModelMatrix.main.addTranslation(12.0f, 1.5f, -16.0f);
+			ModelMatrix.main.addScale(2.0f, 2.0f, 0.1f);
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			BoxGraphic.drawSolidCube(shader, congratz);
 			ModelMatrix.main.popMatrix();
 	
-			
 			shader.setMaterialDiffuse(0.5f, 0.3f, 1.0f, 1.0f);
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
@@ -316,9 +268,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			maze.drawMaze();
 			
 			if(viewNum == 1)
-			{
-				//shader.setMaterialDiffuse(1.0f, 0.3f, 0.1f, 1.0f);
-				
+			{				
 				ModelMatrix.main.pushMatrix();
 				ModelMatrix.main.addTranslation(cam.eye.x, cam.eye.y, cam.eye.z);
 
@@ -362,15 +312,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	}
 	
 	public void drawHorizontalBlobs() {
-		//Blob
+		//Ghost 1
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -4.5f);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
 			movingRight = false;
 		}
-		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
-		{
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false) {
 			movingRight = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -380,15 +328,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
 		
-		//Blob
+		//Ghost 2
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -8.5f);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
 			movingRight = false;
 		}
-		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
-		{
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false) {
 			movingRight = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -398,15 +344,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
 		
-		//Blob
+		//Ghost 3
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -12.5f);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
 			movingRight = false;
 		}
-		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
-		{
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false) {
 			movingRight = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -418,15 +362,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	}
 
 	public void drawVerticalBlobs() {
-		//Blob
+		//Ghost 1
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(5.5f, 1.0f, -1.5f - moveLength2);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
 			movingUp = false;
 		}
-		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
-		{
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false) {
 			movingUp = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -436,15 +378,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
 		
-		//Blob
+		//Ghost 2
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(9.5f, 1.0f, -1.5f - moveLength2);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
 			movingUp = false;
 		}
-		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
-		{
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false) {
 			movingUp = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -454,15 +394,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		model.draw(shader);
 		ModelMatrix.main.popMatrix();
 		
-		//Blob
+		//Ghost 3
 		ModelMatrix.main.pushMatrix();
 		ModelMatrix.main.addTranslation(13.5f, 1.0f, -1.5f - moveLength2);
-		//if we hit right wall
 		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
 			movingUp = false;
 		}
-		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
-		{
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false) {
 			movingUp = true;
 		}
 		checkCollision(ModelMatrix.main.getOrigin());
@@ -475,12 +413,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	
 	@Override
 	public void render () {
-		
-		input();
-		//put the code inside the update and display methods, depending on the nature of the code
 		update();
 		display();
-
 	}
 
 	@Override
