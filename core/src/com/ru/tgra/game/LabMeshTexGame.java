@@ -250,7 +250,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
-
+/**/
+			//Blob
 			ModelMatrix.main.pushMatrix();
 			ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -4.5f);
 			//if we hit right wall
@@ -261,12 +262,23 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			{
 				movingRight = true;
 			}
+			//checkCollision(ModelMatrix.main.getOrigin());
+			
+			if( (cam.eye.x > (ModelMatrix.main.getOrigin().x - 0.5f) && 
+				 cam.eye.x < (ModelMatrix.main.getOrigin().x + 0.5f)) &&
+				(cam.eye.z > (ModelMatrix.main.getOrigin().z - 0.5f) &&
+				 cam.eye.z < (ModelMatrix.main.getOrigin().z + 0.5f)) ) 
+			{
+				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
+			}
+			
 			ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			model.draw(shader);
 			ModelMatrix.main.popMatrix();
-			
+/**/
+			//Dice
 			ModelMatrix.main.pushMatrix();
 			ModelMatrix.main.addTranslation(8.0f, 4.0f, -8.0f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
@@ -294,6 +306,10 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 				ModelMatrix.main.popMatrix();				
 			}
 		}
+	}
+	
+	public void checkCollision(Point3D p){
+		
 	}
 
 	@Override
