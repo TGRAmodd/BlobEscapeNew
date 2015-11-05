@@ -1,5 +1,7 @@
 package com.ru.tgra.graphics;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.ru.tgra.graphics.shapes.BoxGraphic;
 import com.ru.tgra.graphics.Cell;
 import com.ru.tgra.graphics.MazeBuilder;
@@ -12,9 +14,11 @@ public class Maze {
 	public static int height;
 	
 	Shader shader;
+	Texture grassTex;
 	
 	public Maze(int width, int height){
 		shader = new Shader();
+		grassTex = new Texture(Gdx.files.internal("textures/grass.png"));
 		Maze.width = width;
 		Maze.height = height;
 		cells = new Cell[width][height];
@@ -51,13 +55,14 @@ public class Maze {
 		
 		//floor
 		ModelMatrix.main.pushMatrix();
-		ModelMatrix.main.addTranslation(0, -50f, 0);
-		ModelMatrix.main.addScale(50, 100f, 50f);
+		ModelMatrix.main.addTranslation(2f, -49.4f, -3f);
+		ModelMatrix.main.addScale(30f, 100f, 30f);
 		
 		
 		//ModelMatrix.main.setShaderMatrix();
 		shader.setModelMatrix(ModelMatrix.main.getMatrix());
-		BoxGraphic.drawSolidCube(shader, null);
+		shader.setMaterialDiffuse(0.6f, 0.4f, 0.6f, 1.0f);
+		BoxGraphic.drawSolidCube(shader, grassTex);
 		ModelMatrix.main.popMatrix();
 		
 		ModelMatrix.main.addTranslation(0,1,0);

@@ -24,8 +24,11 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	Shader shader;
 
 	private float angle;
+
 	private boolean coplight;
 	private int coplightCounter;
+
+	private float moveLength;
 
 	private Camera cam;
 	private Camera topCam;
@@ -86,7 +89,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 		tex = new Texture(pm);*/
 
-		Gdx.gl.glClearColor(0.3f, 0.3f, 0.8f, 1.0f);
+		Gdx.gl.glClearColor(0.35f, 0.35f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
 	}
 
@@ -99,6 +102,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		
 		angle += 180.0f * deltaTime;
+		moveLength += deltaTime * 2.0f;
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 			cam.slide(-3.0f * deltaTime, 0, 0);
@@ -167,13 +171,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 				shader.setProjectionMatrix(topCam.getProjectionMatrix());
 				shader.setEyePosition(topCam.eye.x, topCam.eye.y, topCam.eye.z, 1.0f);	
 			}
-
-	
-			//BoxGraphic.drawOutlineCube();
-			//SphereGraphic.drawSolidSphere();
-			//SphereGraphic.drawOutlineSphere();
-
-
+			
 			ModelMatrix.main.loadIdentityMatrix();
 
 			//ModelMatrix.main.addRotationZ(angle);
@@ -211,37 +209,45 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			float c2 = Math.abs((float)Math.cos((angle / 1.312) * Math.PI / 180.0));
 
 			shader.setSpotDirection(s2, -0.3f, c2, 0.0f);
-			//shader.setSpotDirection(-cam.n.x, -cam.n.y, -cam.n.z, 0.0f);
 			shader.setSpotExponent(0.0f);
 			shader.setConstantAttenuation(1.0f);
 			shader.setLinearAttenuation(0.00f);
 			shader.setQuadraticAttenuation(0.00f);
 
+
 			//shader.setLightColor(s2, 0.4f, c2, 1.0f);
 			//shader.setLightColor(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setLightColor2(0.2f, 0.2f, 1.0f, 1.0f);
 			//shader.setLightColor3(1.0f, 0.2f, 0.2f, 1.0f);
+
 			
 			shader.setGlobalAmbient(0.3f, 0.3f, 0.3f, 1);
 
-			//shader.setMaterialDiffuse(s, 0.4f, c, 1.0f);
 			shader.setMaterialDiffuse(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
-			//shader.setMaterialSpecular(0.0f, 0.0f, 0.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
 
 			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(0.0f, 4.0f, 0.0f);
+			ModelMatrix.main.addTranslation(6.0f, 4.0f, -6.0f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
-
-			BoxGraphic.drawSolidCube(shader, tex);
-			//model.draw(shader);
-
+			model.draw(shader);
 			ModelMatrix.main.popMatrix();
+			
+			ModelMatrix.main.pushMatrix();
+			ModelMatrix.main.addTranslation(8.0f, 4.0f, -8.0f);
+			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+			shader.setModelMatrix(ModelMatrix.main.getMatrix());
+			BoxGraphic.drawSolidCube(shader, tex);
+			ModelMatrix.main.popMatrix();
+			
+			shader.setMaterialDiffuse(0.5f, 0.3f, 1.0f, 1.0f);
+			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
+			shader.setMaterialEmission(0, 0, 0, 1);
+			shader.setShininess(50.0f);
 			maze.drawMaze();
-
+			
 			if(viewNum == 1)
 			{
 				//shader.setMaterialDiffuse(1.0f, 0.3f, 0.1f, 1.0f);

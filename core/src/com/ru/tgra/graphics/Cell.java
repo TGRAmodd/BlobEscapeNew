@@ -1,6 +1,7 @@
 package com.ru.tgra.graphics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.ru.tgra.graphics.shapes.BoxGraphic;
 import com.ru.tgra.game.LabMeshTexGame;
 import com.ru.tgra.graphics.ModelMatrix;
@@ -8,12 +9,14 @@ import com.ru.tgra.graphics.Shader;
 
 public class Cell {
 	Shader shader;
+	Texture brickTex;
 	public boolean northWall;
 	public boolean eastWall;
 	public float wallWidth;
 	
 	public Cell(boolean north, boolean east){
 		shader = new Shader();
+		brickTex = new Texture(Gdx.files.internal("textures/bricks.png"));
 		this.northWall = north;
 		this.eastWall = east;
 		wallWidth = 0.1f;
@@ -28,7 +31,7 @@ public class Cell {
 				ModelMatrix.main.addScale(1.1f,1, wallWidth);
 				//ModelMatrix.main.setShaderMatrix();
 				shader.setModelMatrix(ModelMatrix.main.getMatrix());
-				BoxGraphic.drawSolidCube(shader, null);
+				BoxGraphic.drawSolidCube(shader, brickTex);
 	
 			ModelMatrix.main.popMatrix();
 	
@@ -40,7 +43,7 @@ public class Cell {
 				ModelMatrix.main.addScale(wallWidth,1, 1.1f);
 				//ModelMatrix.main.setShaderMatrix();
 				shader.setModelMatrix(ModelMatrix.main.getMatrix());
-				BoxGraphic.drawSolidCube(shader, null);
+				BoxGraphic.drawSolidCube(shader, brickTex);
 				
 			ModelMatrix.main.popMatrix();
 		}
