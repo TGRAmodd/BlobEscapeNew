@@ -29,6 +29,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private float angle;
 
 	private float moveLength;
+	private float speed;
 
 	private Camera cam;
 	private Camera topCam;
@@ -48,11 +49,13 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private Texture tex;
 	
 	private Maze maze;
+	private boolean movingRight;
 	
 	Random rand = new Random();
 
 	@Override
 	public void create () {
+		movingRight = true;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -99,6 +102,9 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 		Gdx.gl.glClearColor(0.35f, 0.35f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
+		
+		speed = 1.5f;
+		moveLength = 0.0f;
 	}
 
 	private void input()
@@ -110,7 +116,15 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		
 		angle += 180.0f * deltaTime;
-		moveLength += deltaTime * 2.0f;
+		
+		if(movingRight)
+		{
+			moveLength += speed * deltaTime;
+		}
+		else
+		{
+			moveLength -= speed * deltaTime;
+		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 			cam.slide(-3.0f * deltaTime, 0, 0);
@@ -238,7 +252,16 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setShininess(50.0f);
 
 			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(6.0f, 4.0f, -6.0f);
+			ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -4.5f);
+			//if we hit right wall
+			if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
+				movingRight = false;
+			}
+			if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
+			{
+				movingRight = true;
+			}
+			ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			model.draw(shader);
