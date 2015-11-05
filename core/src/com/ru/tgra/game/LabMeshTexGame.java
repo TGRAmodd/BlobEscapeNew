@@ -29,6 +29,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private float angle;
 
 	private float moveLength;
+	private float moveLength2;
 	private float speed;
 
 	private Camera cam;
@@ -50,12 +51,14 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	
 	private Maze maze;
 	private boolean movingRight;
+	private boolean movingUp;
 	
 	Random rand = new Random();
 
 	@Override
 	public void create () {
 		movingRight = true;
+		movingUp = true;
 
 		Gdx.input.setInputProcessor(this);
 
@@ -105,6 +108,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		
 		speed = 1.5f;
 		moveLength = 0.0f;
+		moveLength2 = 0.0f;
 	}
 
 	private void input()
@@ -117,13 +121,17 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		
 		angle += 180.0f * deltaTime;
 		
-		if(movingRight)
-		{
+		if(movingRight) {
 			moveLength += speed * deltaTime;
-		}
-		else
-		{
+		} else {
 			moveLength -= speed * deltaTime;
+		}
+		
+		if (movingUp) {
+			moveLength2 += speed * deltaTime;
+		}
+		else {
+			moveLength2 -= speed * deltaTime;
 		}
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -250,26 +258,10 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
 			shader.setMaterialEmission(0, 0, 0, 1);
 			shader.setShininess(50.0f);
-/**/
-			//Blob
-			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -4.5f);
-			//if we hit right wall
-			if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
-				movingRight = false;
-			}
-			if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
-			{
-				movingRight = true;
-			}
-			checkCollision(ModelMatrix.main.getOrigin());
 			
-			ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
-			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
-			shader.setModelMatrix(ModelMatrix.main.getMatrix());
-			model.draw(shader);
-			ModelMatrix.main.popMatrix();
-/**/
+			drawHorizontalBlobs();
+			drawVerticalBlobs();
+
 			//Dice
 			ModelMatrix.main.pushMatrix();
 			ModelMatrix.main.addTranslation(8.0f, 4.0f, -8.0f);
@@ -300,14 +292,126 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		}
 	}
 	
-	public void checkCollision(Point3D p){
+	public void checkCollision(Point3D p) {
 		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
 			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
 			{
 				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
 			}
 	}
+	
+	public void drawHorizontalBlobs() {
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -4.5f);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
+			movingRight = false;
+		}
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
+		{
+			movingRight = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(0,1,0));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+		
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -8.5f);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
+			movingRight = false;
+		}
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
+		{
+			movingRight = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+		
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(1.5f + moveLength, 1.0f, -12.5f);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().x > 13.5f && movingRight == true) {
+			movingRight = false;
+		}
+		if(ModelMatrix.main.getOrigin().x < 1.4f && movingRight == false)
+		{
+			movingRight = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+	}
 
+	public void drawVerticalBlobs() {
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(5.5f, 1.0f, -1.5f - moveLength2);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
+			movingUp = false;
+		}
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
+		{
+			movingUp = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+		
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(9.5f, 1.0f, -1.5f - moveLength2);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
+			movingUp = false;
+		}
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
+		{
+			movingUp = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+		
+		//Blob
+		ModelMatrix.main.pushMatrix();
+		ModelMatrix.main.addTranslation(13.5f, 1.0f, -1.5f - moveLength2);
+		//if we hit right wall
+		if(ModelMatrix.main.getOrigin().z < -12.5f && movingUp == true) {
+			movingUp = false;
+		}
+		if(ModelMatrix.main.getOrigin().z > -0.5f && movingUp == false)
+		{
+			movingUp = true;
+		}
+		checkCollision(ModelMatrix.main.getOrigin());
+		ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
+		ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
+		shader.setModelMatrix(ModelMatrix.main.getMatrix());
+		model.draw(shader);
+		ModelMatrix.main.popMatrix();
+	}
+	
 	@Override
 	public void render () {
 		
