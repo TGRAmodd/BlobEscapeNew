@@ -49,7 +49,7 @@ public class Maze {
 			mb.buildHardCodedMaze();
 		}
 	}
-	
+
 	public void drawMaze(){
 		ModelMatrix.main.pushMatrix();
 		

@@ -202,7 +202,7 @@ public class MazeBuilder {
 		Maze.cells[8][13] = new Cell(true,false);
 		Maze.cells[9][13] = new Cell(true,false);
 		Maze.cells[10][13] = new Cell(true,false);
-		Maze.cells[11][13] = new Cell(false,false);
+		Maze.cells[11][13] = new Cell(true,false);
 		Maze.cells[12][13] = new Cell(true,false);
 		Maze.cells[13][13] = new Cell(true,true);
 	}
