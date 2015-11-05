@@ -50,6 +50,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	MeshModel gem;
 
 	private Texture tex;
+	private Texture congratz;
 	
 	private Maze maze;
 	private boolean movingRight;
@@ -80,7 +81,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		copLights = new BlinkingLights();
 		lightsOnOff = true;
 
-		tex = new Texture(Gdx.files.internal("textures/dice.png"));
+		tex = new Texture(Gdx.files.internal("textures/trump.jpg"));
+		congratz = new Texture(Gdx.files.internal("textures/congratz.png"));
 
 		model = G3DJModelLoader.loadG3DJFromFile("finalGhostRotate2.g3dj");
 		gem = G3DJModelLoader.loadG3DJFromFile("gemRotate1.g3dj");
@@ -291,11 +293,21 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 
 			//Dice
 			ModelMatrix.main.pushMatrix();
-			ModelMatrix.main.addTranslation(8.0f, 4.0f, -8.0f);
+			ModelMatrix.main.addTranslation(8.0f, 6.0f, -8.0f);
+			ModelMatrix.main.addScale(2.0f, 2.0f, 2.0f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
 			shader.setModelMatrix(ModelMatrix.main.getMatrix());
 			BoxGraphic.drawSolidCube(shader, tex);
 			ModelMatrix.main.popMatrix();
+			
+			//Congratulatory box
+			ModelMatrix.main.pushMatrix();
+			ModelMatrix.main.addTranslation(12.0f, 1.0f, -16.0f);
+			ModelMatrix.main.addScale(2.0f, 2.0f, 2.0f);
+			shader.setModelMatrix(ModelMatrix.main.getMatrix());
+			BoxGraphic.drawSolidCube(shader, congratz);
+			ModelMatrix.main.popMatrix();
+	
 			
 			shader.setMaterialDiffuse(0.5f, 0.3f, 1.0f, 1.0f);
 			shader.setMaterialSpecular(1.0f, 1.0f, 1.0f, 1.0f);
