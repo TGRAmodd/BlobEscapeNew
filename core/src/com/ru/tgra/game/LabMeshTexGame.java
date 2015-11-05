@@ -262,15 +262,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 			{
 				movingRight = true;
 			}
-			//checkCollision(ModelMatrix.main.getOrigin());
-			
-			if( (cam.eye.x > (ModelMatrix.main.getOrigin().x - 0.5f) && 
-				 cam.eye.x < (ModelMatrix.main.getOrigin().x + 0.5f)) &&
-				(cam.eye.z > (ModelMatrix.main.getOrigin().z - 0.5f) &&
-				 cam.eye.z < (ModelMatrix.main.getOrigin().z + 0.5f)) ) 
-			{
-				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
-			}
+			checkCollision(ModelMatrix.main.getOrigin());
 			
 			ModelMatrix.main.addScale(0.25f, 0.25f, 0.25f);
 			ModelMatrix.main.addRotation(angle, new Vector3D(1,1,1));
@@ -309,7 +301,11 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	}
 	
 	public void checkCollision(Point3D p){
-		
+		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
+			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
+			{
+				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
+			}
 	}
 
 	@Override
