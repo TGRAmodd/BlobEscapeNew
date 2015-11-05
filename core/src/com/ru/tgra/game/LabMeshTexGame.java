@@ -9,6 +9,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Graphics.DisplayMode;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -52,6 +53,8 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 	private Maze maze;
 	private boolean movingRight;
 	private boolean movingUp;
+	
+	private Sound scream;
 	
 	Random rand = new Random();
 
@@ -106,9 +109,11 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		Gdx.gl.glClearColor(0.35f, 0.35f, 0.8f, 1.0f);
 		Gdx.input.setCursorCatched(true);
 		
-		speed = 1.5f;
+		speed = 3.5f;
 		moveLength = 0.0f;
 		moveLength2 = 0.0f;
+		
+		scream = Gdx.audio.newSound(Gdx.files.internal("scream.mp3"));
 	}
 
 	private void input()
@@ -164,6 +169,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
 			Gdx.graphics.setDisplayMode(500, 500, false);
+			scream.dispose();
 			Gdx.app.exit();
 		}
 		
@@ -298,6 +304,7 @@ public class LabMeshTexGame extends ApplicationAdapter implements InputProcessor
 		if( (cam.eye.x > (p.x - 0.5f) && cam.eye.x < (p.x + 0.5f)) &&
 			(cam.eye.z > (p.z - 0.5f) && cam.eye.z < (p.z + 0.5f)) ) 
 			{
+				scream.setVolume(scream.play(), 0.4f);
 				cam.look(new Point3D(1.5f, 1f, -0.5f), new Point3D(2.5f,1,-1.5f), new Vector3D(0,1,0));
 			}
 	}
